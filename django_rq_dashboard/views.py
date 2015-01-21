@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _, ugettext as __
 from django.views import generic
 
-from rq import Queue, Worker, get_failed_queue, push_connection
+from rq import Queue, Worker, get_failed_queue, push_connection, use_connection
 from rq.exceptions import NoSuchJobError
 from rq.job import Job
 
@@ -86,7 +86,7 @@ class SuperUserMixin(object):
         #self.connection = redis.Redis(**opts)
         import os
         self.connection = redis.from_url(os.getenv(request.GET['env']))
-        push_connection(self.connection)
+        use_connection(self.connection)
 
         return super(SuperUserMixin, self).dispatch(request, *args, **kwargs)
 
