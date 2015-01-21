@@ -83,7 +83,9 @@ class SuperUserMixin(object):
 
         opts = getattr(settings, 'RQ', {}).copy()
         opts.pop('eager', None)
-        self.connection = redis.Redis(**opts)
+        #self.connection = redis.Redis(**opts)
+        import os
+        self.connection = redis.from_url(os.getenv(request.GET['env']))
         push_connection(self.connection)
 
         return super(SuperUserMixin, self).dispatch(request, *args, **kwargs)
